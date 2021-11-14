@@ -1,19 +1,18 @@
 import { Controller, Get } from '@nestjs/common';
-import {
-  SearchAllBankAccountsResponse, 
-  SearchAllBankAccountsService,
-} from '../../application/searchAllBankAccounts.service';
-import { UnitOfWork } from '../unitOfWork/unitOfWork';
-
+import { SearchAllBankAccountsService } from '../../application/searchAllBankAccounts.service';
+import { SearchAllBankAccountsResponse } from '../../domain/entity/searchBankAccountResponse.entity';
+import { BankAccountRepository } from '../repositories/bankAccount.repository';
 @Controller('getAllBankAccount')
 export class GetAllBankAccountsController{
-  constructor(private readonly _unitOfWork: UnitOfWork) {}
 
+  constructor(private readonly _bankAccountRepository: BankAccountRepository,
+    private readonly searchAllBankAccountsService: SearchAllBankAccountsService) {}
 
   @Get()
   async getAllBankAccounts(){
-    const res: SearchAllBankAccountsResponse = await this._unitOfWork.complete(async () => await new SearchAllBankAccountsService(this._unitOfWork).execute());
+    const res: SearchAllBankAccountsResponse = await this._bankAccountRepository.complete(
+      async () => await this.searchAllBankAccountsService.execute()
+    );
     return res;
   }
-
 }

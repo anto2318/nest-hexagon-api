@@ -1,6 +1,6 @@
 import { Connection } from 'typeorm';
-import { BankAccountOrm } from '../../../domain/entity/bankAccount.orm';
-import { FinancialMovementOrm } from '../../../domain/entity/financialMovement.orm';
+import { BankAccountOrm } from '../entity/bankAccount.orm';
+import { FinancialMovementOrm } from '../entity/financialMovement.orm';
 
 
 export const bankAccountProviders = [

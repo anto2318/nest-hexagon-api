@@ -1,8 +1,8 @@
 import { Transaction } from "./transaction.entity";
-import { IFinancialServicesInterface } from './iFinancialServices.interface';
-import { FinancialMovement } from './financialMovement.entity';
+import { FinancialServicesInterface } from '../interfaces/financialServicesInterface';
+import { FinancialMovement } from './financialMovement';
 
-export class BankAccount implements IFinancialServicesInterface{
+export class BankAccount implements FinancialServicesInterface{
 
   public balance: number;
   public name: string;
@@ -25,7 +25,7 @@ export class BankAccount implements IFinancialServicesInterface{
     this.movements.push(movement);
   }
 
-  public move(financialService: IFinancialServicesInterface, transaction: Transaction) {
+  public move(financialService: FinancialServicesInterface, transaction: Transaction) {
     this.withdrawal(transaction);
     financialService.consign(transaction);
   }

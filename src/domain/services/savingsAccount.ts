@@ -1,15 +1,19 @@
-import { Transaction } from './transaction.entity';
-import { FinancialMovement } from './financialMovement.entity';
-import { BankAccount } from './bankAccount.entity';
+import { Transaction } from '../entity/transaction.entity';
+import { FinancialMovement } from '../entity/financialMovement';
+import { BankAccount } from '../entity/bankAccount';
 
 export class SavingsAccount extends BankAccount{
 
   private maxWithdrawal = 20000;
   private costWithdrawal = 5000;
 
-  constructor() {
+  constructor(name: string, city: string, number: string, balance: number, movements: FinancialMovement[]) {
     super();
-    this.movements = [];
+    this.name = name; 
+    this.city = city;
+    this.number = number;
+    this.balance = balance;
+    this.movements = movements;
   }
 
   public consign(transaction: Transaction) {

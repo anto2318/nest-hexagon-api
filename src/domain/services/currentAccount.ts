@@ -1,11 +1,20 @@
-import { Transaction } from './transaction.entity';
-import { BankAccount} from './bankAccount.entity';
-import { FinancialMovement } from './financialMovement.entity';
+import { Transaction } from '../entity/transaction.entity';
+import { BankAccount} from '../entity/bankAccount';
+import { FinancialMovement } from '../entity/financialMovement';
 
 export class CurrentAccount extends BankAccount{
 
   public _minimumWithdrawal = -100000;
 
+  constructor(name: string, city: string, number: string, balance: number, movements: FinancialMovement[]) {
+    super();
+    this.name = name; 
+    this.city = city;
+    this.number = number;
+    this.balance = balance;
+    this.movements = movements;
+  }
+  
   public consign(transaction: Transaction) {
     if(this.verifyFirstConsign() && transaction.value >= 100000){
       super.consign(transaction);

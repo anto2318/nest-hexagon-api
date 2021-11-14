@@ -1,39 +1,22 @@
-import { BankAccount } from '../domain/entity/bankAccount.entity';
-import { IUnitOfWork } from '../domain/interfaces/unitOfWork.interface';
-import { BankAccountFactory } from '../domain/factory/bankAccount.factory';
-
+import { BankAccount } from '../domain/entity/bankAccount';
+import { BankAccountInterface} from '../domain/interfaces/bankAccountInterface';
+import { CreateAccount } from '../domain/factory/createAccount';
+import { CreateBankAccountRequest } from '../domain/entity/createBankAccountRequest';
+import { CreateBankAccountResponse } from '../domain/entity/createBankAccountResponse';
 export class CreateBankAccountService{
-  constructor(private readonly _unitOfWork: IUnitOfWork) {}
 
-  public async execute(request: CreateBankAccountRequest): Promise<CreateBankAccountResponse>{
+  constructor(private readonly bankAccountInterface: BankAccountInterface) {}
+
+  public async execute(createRequest: CreateBankAccountRequest): Promise<CreateBankAccountResponse>{
 
     let newBankAccount: BankAccount;
-    const bankAccount = await this._unitOfWork.bankAccountRepository.findOne(request.number);
+    const bankAccount = await this.bankAccountInterface.searchOne(createRequest.number);
     if (bankAccount == undefined){
-      newBankAccount = new BankAccountFactory().create(request.type);
-      newBankAccount.number = request.number;
-      newBankAccount.city = request.city;
-      newBankAccount.balance = 0;
-      newBankAccount.name = request.name;
-      newBankAccount.movements = [];
-      await this._unitOfWork.start();
-      const savedData = await this._unitOfWork.bankAccountRepository.save(newBankAccount);
-      return new CreateBankAccountResponse('Cuenta de '+ request.type + ' ' + savedData.number + ' creada satisfactoriamente');
+      newBankAccount = new CreateAccount().createBankAccount(createRequest);
+      await this.bankAccountInterface.start();
+      const savedData = await this.bankAccountInterface.saveAccount(newBankAccount);
+      return new CreateBankAccountResponse('Cuenta de '+ createRequest.type + ' ' + savedData.number + ' creada satisfactoriamente');
     }
     return new CreateBankAccountResponse('El numero de cuenta ya existe');
   }
-}
-
-export class CreateBankAccountRequest{
-  public name: string;
-  public number: string;
-  public city: string;
-  public type: string;
-}
-
-export class CreateBankAccountResponse{
-  constructor(
-    public message: string,
-    public typeBankAccountCreated?: string
-  ){}
 }

@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { FinancialMovementOrm } from './financialMovement.orm';
 
 @Entity()
